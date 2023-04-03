@@ -25,17 +25,19 @@ interface Context {
 }
 
 export const UserCtx = createContext<Context>({
-  isDarkTheme: null,
+  isDarkTheme: false,
+  invoices: null,
   toggleTheme: () => {},
-  invoices: [],
 });
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
-  const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const toggleDarkTheme = () => setIsDarkTheme((prevTheme) => !prevTheme);
-  const [invoices, setInvoices] = useState<Invoice[]>(data);
+  const [invoices, setInvoices] = useState<Invoice[]>(invoiceData);
   return (
-    <UserCtx.Provider value={{ isDarkTheme, toggleTheme: toggleDarkTheme }}>
+    <UserCtx.Provider
+      value={{ isDarkTheme, toggleTheme: toggleDarkTheme, invoices }}
+    >
       {children}
     </UserCtx.Provider>
   );

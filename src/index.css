@@ -4,6 +4,6 @@
 
 @layer base {
   body {
-    @apply text-fem-blue-800;
+    @apply text-fem-blue-800 dark:bg-fem-blue-800 dark:text-white;
   }
 }
