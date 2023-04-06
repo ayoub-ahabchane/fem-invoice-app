@@ -3,7 +3,6 @@ import { UserCtx } from "../store/UserContext";
 
 const ThemeToggle = () => {
   const { isDarkTheme, toggleTheme } = useContext(UserCtx);
-  console.log(isDarkTheme);
   return (
     <button
       className="px-6 py-[1.625rem] md:px-[2rem] md:py-[1.875rem]"

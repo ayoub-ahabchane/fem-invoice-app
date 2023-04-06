@@ -24,6 +24,9 @@ export default {
           400: "#EC5757",
           300: "#9277FF",
         },
+        "fem-orange": "#FF8F00",
+        "fem-green": "#33D69F",
+        "fem-muted": "#373B53",
       },
       fontFamily: {
         sans: ['"League Spartan"'],
@@ -38,7 +41,7 @@ export default {
           },
         ],
         "heading-m": [
-          "1.15rem",
+          "1.5rem",
           {
             fontWeight: "700",
             lineHeight: "0.91em",

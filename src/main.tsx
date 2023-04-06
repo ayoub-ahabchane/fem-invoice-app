@@ -4,12 +4,13 @@ import App from "./routes/App";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { UserContextProvider } from "./store/UserContext";
+import Invoices from "./routes/Invoices";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children: [{ index: true, element: <main>Invoices</main> }],
+    children: [{ index: true, element: <Invoices /> }],
   },
 ]);
 

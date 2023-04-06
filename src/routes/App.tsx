@@ -9,10 +9,8 @@ function App() {
     const htmlElement = document.getElementById("html");
     if (isDarkTheme) {
       htmlElement!.classList.add("dark");
-      console.log("dark");
     } else {
       htmlElement!.classList.remove("dark");
-      console.log("light");
     }
   }, [isDarkTheme]);
   return (

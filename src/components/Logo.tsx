@@ -4,7 +4,7 @@ const Logo = () => {
   return (
     <Link
       to={"/"}
-      className="relative aspect-square w-[4.5rem] overflow-hidden bg-fem-violet-400 md:w-20 lg:w-[6.4375rem] lg:rounded-r-[1.25rem]"
+      className="relative aspect-square w-[4.5rem] shrink-0 overflow-hidden rounded-r-[1.25rem] bg-fem-violet-400 md:w-20 lg:w-[6.4375rem]"
     >
       <div className="h-1/2 bg-fem-violet-400"></div>
       <div className="h-1/2 rounded-tl-[1.25rem] bg-fem-violet-300"></div>
