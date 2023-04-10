@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { UserCtx } from "../store/UserContext";
 import GoBack from "../components/GoBack";
 import { InvoiceStatus } from "../components/StatusBadge";
-import { asCurrency, toEnglishDate } from "../store/utils";
+import { toEnglishDate } from "../store/utils";
 import { MobileInvoiceLines } from "../components/mobileInvoiceLines";
+import { LargeInvoiceLines } from "../components/LargeInvoiceLines";
 
 export async function loader({ params }) {
   return { params };
@@ -51,11 +52,8 @@ const Invoice = () => {
             </div>
             <address className="muted-heading flex flex-col gap-1.5 not-italic md:text-right">
               <p>{invoice!.senderAddress.street}</p>
-
               <p> {invoice!.senderAddress.city}</p>
-
               <p>{invoice!.senderAddress.postCode}</p>
-
               <p>{invoice!.senderAddress.country}</p>
             </address>
           </section>
@@ -107,65 +105,10 @@ const Invoice = () => {
             invoiceLines={invoice!.items}
             total={invoice!.total}
           />
-          <section className="overflow-hidden rounded-lg bg-fem-blue-100 dark:bg-fem-blue-500 md:mt-4">
-            {/* <ul className="flex flex-col gap-6 p-6">
-              {invoice!.items.map(({ name, price, quantity, total }) => (
-                <li
-                  className="flex items-center justify-between"
-                  key={Math.random()}
-                >
-                  <p className="flex flex-col gap-2">
-                    <span className="text-heading-s-variant">{name}</span>
-                    <span className="text-heading-s-variant text-fem-blue-300 dark:text-fem-blue-400">
-                      {quantity} x £ {asCurrency("en-GB", price)}
-                    </span>
-                  </p>
-                  <p className="text-heading-s-variant">
-                    £ {asCurrency("en-GB", total)}
-                  </p>
-                </li>
-              ))}
-            </ul> */}
-            <div className="p-8">
-              <table className="w-full table-auto">
-                <thead className="border-b-[2rem] border-transparent text-[0.8125rem] font-medium leading-none text-fem-blue-300 dark:text-fem-blue-200">
-                  <tr>
-                    <th className="text-left">Item name</th>
-                    <th className="text-center">QTY.</th>
-                    <th className="text-right">Price</th>
-                    <th className="text-right">Total</th>
-                  </tr>
-                </thead>
-                <tbody className="text-heading-s-variant">
-                  {invoice!.items.map(({ name, quantity, price, total }) => (
-                    <tr
-                      key={Math.random()}
-                      className="border-b-[2rem] border-transparent last:border-b-0"
-                    >
-                      <td>{name}</td>
-                      <td className="text-center text-fem-blue-300 dark:text-fem-blue-200 ">
-                        {quantity}
-                      </td>
-                      <td className="text-right text-fem-blue-300 dark:text-fem-blue-200 ">
-                        £ {asCurrency("en-GB", price)}
-                      </td>
-                      <td className="text-right">
-                        £ {asCurrency("en-GB", total)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <p className="flex items-center justify-between bg-fem-blue-600 px-6 py-6 text-white dark:bg-fem-blue-900">
-              <span className="text-[0.8125rem] leading-[1.384em]">
-                Grand Total
-              </span>
-              <span className="text-2xl font-bold">
-                £ {asCurrency("en-GB", invoice!.total)}
-              </span>
-            </p>
-          </section>
+          <LargeInvoiceLines
+            invoiceLines={invoice!.items}
+            total={invoice!.total}
+          />
         </div>
       </div>
       <div className="fixed inset-x-0 bottom-0 bg-white p-6 shadow-[0px_-20px_10px_-10px_rgba(72,84,159,0.100397)] dark:bg-fem-blue-700 dark:shadow-[0px_-20px_10px_-10px_rgba(0,0,0,0.10)] md:hidden">
