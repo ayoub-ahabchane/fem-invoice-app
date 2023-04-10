@@ -10,6 +10,7 @@ export default {
           300: "#9277FF",
         },
         "fem-blue": {
+          100: "#F9FAFE",
           200: "#DFE3FA",
           300: "#7E88C3",
           400: "#888EB0",
@@ -22,11 +23,14 @@ export default {
         "fem-light": "#F8F8FB",
         "fem-red": {
           400: "#EC5757",
-          300: "#9277FF",
+          300: "#FF9797",
         },
         "fem-orange": "#FF8F00",
         "fem-green": "#33D69F",
         "fem-muted": "#373B53",
+      },
+      boxShadow: {
+        soft: "0px 10px 10px -10px rgba(72, 84, 159, 0.100397)",
       },
       fontFamily: {
         sans: ['"League Spartan"'],

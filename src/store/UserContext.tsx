@@ -1,7 +1,7 @@
 import invoiceData from "../store/data.json";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
-interface InvoiceItem {
+export interface InvoiceItem {
   name: string;
   quantity: number;
   price: number;
@@ -13,9 +13,9 @@ interface InvoiceAddress {
   postCode: string;
   country: string;
 }
-interface Invoice {
+export interface Invoice {
   id: string;
-  createdAt: string;
+  createdAt: Date;
   paymentDue: Date;
   description: string;
   paymentTerms: number;
@@ -55,7 +55,11 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
 
   const [invoices, setInvoices] = useState<Invoice[]>(
     invoiceData.map((invoice) => {
-      return { ...invoice, paymentDue: new Date(invoice.paymentDue) };
+      return {
+        ...invoice,
+        paymentDue: new Date(invoice.paymentDue),
+        createdAt: new Date(invoice.createdAt),
+      };
     })
   );
 

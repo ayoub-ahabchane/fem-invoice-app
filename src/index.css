@@ -6,4 +6,28 @@
   body {
     @apply bg-fem-light text-fem-blue-800 dark:bg-fem-blue-800 dark:text-white;
   }
+  th {
+    font-weight: inherit;
+  }
+}
+
+@layer components {
+  .muted-heading {
+    @apply text-[0.8125rem] leading-none text-fem-blue-300 dark:text-fem-blue-200;
+  }
+
+  .button {
+    @apply rounded-3xl  px-[1.6em] py-[1em] text-heading-s-variant;
+  }
+  .button.muted {
+    @apply bg-fem-blue-100 text-fem-blue-300;
+  }
+
+  .button.accent {
+    @apply bg-fem-violet-400 text-white;
+  }
+
+  .button.danger {
+    @apply bg-fem-red-400 text-white;
+  }
 }
