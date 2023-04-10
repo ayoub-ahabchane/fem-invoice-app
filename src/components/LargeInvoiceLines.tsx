@@ -9,7 +9,7 @@ export function LargeInvoiceLines({
   total: number;
 }) {
   return (
-    <section className="overflow-hidden rounded-lg bg-fem-blue-100 dark:bg-fem-blue-500 md:mt-4">
+    <section className="hidden overflow-hidden rounded-lg bg-fem-blue-100 dark:bg-fem-blue-500 md:mt-4 md:block">
       <div className="p-8">
         <table className="w-full table-auto">
           <thead className="border-b-[2rem] border-transparent text-[0.8125rem] font-medium leading-none text-fem-blue-300 dark:text-fem-blue-200">

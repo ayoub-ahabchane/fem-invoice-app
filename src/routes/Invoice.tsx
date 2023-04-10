@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { UserCtx } from "../store/UserContext";
 import GoBack from "../components/GoBack";
 import { InvoiceStatus } from "../components/StatusBadge";
@@ -15,7 +15,7 @@ const Invoice = () => {
   const {
     params: { invoiceId },
   } = useLoaderData();
-  const { invoices } = useContext(UserCtx);
+  const { invoices, setInvoices } = useContext(UserCtx);
   const invoice = invoices?.find((item) => item.id == invoiceId);
 
   return (
@@ -36,13 +36,16 @@ const Invoice = () => {
             <button className="button danger focus-within:bg-fem-red-300 hover:bg-fem-red-300">
               Delete
             </button>
-            <button className="button accent focus-within:bg-fem-violet-300 hover:bg-fem-violet-300">
+            <button
+              onClick={() => setInvoices({ type: "paid", id: invoiceId })}
+              className="button accent focus-within:bg-fem-violet-300 hover:bg-fem-violet-300"
+            >
               Mark as Paid
             </button>
           </div>
         </div>
         <div className="flex flex-col gap-8 rounded-lg bg-white p-6 shadow-[0px_10px_10px_-10px_rgba(72,84,159,0.100397)] dark:bg-fem-blue-700 dark:shadow-[0px_10px_10px_-10px_rgba(0,0,0,0.10)] md:p-8">
-          <section className="flex- flex gap-[1.875rem] md:flex-row md:justify-between">
+          <section className="flex- flex justify-between gap-[1.875rem] md:flex-row">
             <div>
               <h1 className="mb-1.5 text-heading-s-variant">
                 <span className="text-fem-blue-300">#</span>
@@ -113,9 +116,18 @@ const Invoice = () => {
       </div>
       <div className="fixed inset-x-0 bottom-0 bg-white p-6 shadow-[0px_-20px_10px_-10px_rgba(72,84,159,0.100397)] dark:bg-fem-blue-700 dark:shadow-[0px_-20px_10px_-10px_rgba(0,0,0,0.10)] md:hidden">
         <div className="flex items-center justify-between">
-          <button className="button muted">Edit</button>
-          <button className="button danger">Delete</button>
-          <button className="button accent">Mark as Paid</button>
+          <button className="button muted focus-within:bg-fem-blue-200 hover:bg-fem-blue-200">
+            Edit
+          </button>
+          <button className="button danger focus-within:bg-fem-red-300 hover:bg-fem-red-300">
+            Delete
+          </button>
+          <button
+            onClick={() => setInvoices({ type: "paid", id: invoiceId })}
+            className="button accent focus-within:bg-fem-violet-300 hover:bg-fem-violet-300"
+          >
+            Mark as Paid
+          </button>
         </div>
       </div>
     </main>

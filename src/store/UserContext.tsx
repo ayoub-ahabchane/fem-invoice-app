@@ -1,5 +1,11 @@
 import invoiceData from "../store/data.json";
-import { ReactNode, createContext, useEffect, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { useLocalStorage } from "./useLocalStorage";
 
 export interface InvoiceItem {
@@ -38,6 +44,7 @@ interface Context {
   isDarkTheme: boolean | null;
   toggleDarkTheme: () => void | null;
   invoices: Invoice[] | null;
+  setInvoices: React.DispatchWithoutAction;
 }
 
 export const UserCtx = createContext<Context>({
@@ -45,22 +52,12 @@ export const UserCtx = createContext<Context>({
   isDarkTheme: false,
   invoices: null,
   toggleDarkTheme: () => {},
+  setInvoices: () => {},
 });
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
-  const [isDarkTheme, setIsDarkTheme] = useLocalStorage(
-    "invoiceAppDarkTheme",
-    false
-  );
-
-  function toggleDarkTheme(): void {
-    setIsDarkTheme(!isDarkTheme);
-  }
-  const [isMobile, setIsMobile] = useState(
-    window.matchMedia("(max-width: 767px)").matches
-  );
-
-  const [invoices, setInvoices] = useState<Invoice[]>(
+  const [invoices, setInvoices] = useReducer(
+    invoicesReducer,
     invoiceData.map((invoice) => {
       return {
         ...invoice,
@@ -69,6 +66,38 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
       };
     })
   );
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia("(max-width: 767px)").matches
+  );
+  const [isDarkTheme, setIsDarkTheme] = useLocalStorage(
+    "invoiceAppDarkTheme",
+    false
+  );
+
+  function toggleDarkTheme(): void {
+    setIsDarkTheme(!isDarkTheme);
+  }
+
+  function invoicesReducer(
+    state: Invoice[],
+    action: { type: string; id: string; paylod?: Invoice }
+  ) {
+    switch (action.type) {
+      case "paid":
+        const paidInvoice = state.find((item) => item.id === action.id);
+        const otherInvoices = state.filter((item) => item.id !== action.id);
+        paidInvoice!.status = "paid";
+        return [...otherInvoices, paidInvoice];
+      case "delete":
+        const filteredInvoices = state.filter((item) => item.id !== action.id);
+        return filteredInvoices;
+      case "edit":
+        const uneditedInvoices = state.filter((item) => item.id !== action.id);
+        return [...uneditedInvoices, action.paylod];
+      default:
+        break;
+    }
+  }
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 767px)");
@@ -80,6 +109,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
       media.removeEventListener("change", updateMedia);
     };
   });
+
   return (
     <UserCtx.Provider
       value={{
@@ -87,6 +117,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         toggleDarkTheme,
         invoices,
         isMobile,
+        setInvoices: setInvoices,
       }}
     >
       {children}
