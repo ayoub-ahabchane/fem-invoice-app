@@ -2,11 +2,11 @@ import { useContext } from "react";
 import { UserCtx } from "../store/UserContext";
 
 const ThemeToggle = () => {
-  const { isDarkTheme, toggleTheme } = useContext(UserCtx);
+  const { isDarkTheme, toggleDarkTheme } = useContext(UserCtx);
   return (
     <button
       className="px-6 py-[1.625rem] md:px-[2rem] md:py-[1.875rem]"
-      onClick={toggleTheme}
+      onClick={toggleDarkTheme}
     >
       {isDarkTheme ? (
         <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">

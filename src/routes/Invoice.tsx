@@ -18,8 +18,8 @@ const Invoice = () => {
   const invoice = invoices?.find((item) => item.id == invoiceId);
 
   return (
-    <main className="relative px-6 pb-8 pt-[6.5625rem] md:px-12 md:pt-[8.0625rem] lg:pt-16">
-      <div className="mx-auto flex max-w-[45.625rem] flex-col gap-4 pb-36 md:gap-6">
+    <main className="relative px-6 pb-8 pt-[6.5625rem] md:px-12 md:pt-[8.0625rem] lg:pt-[4.875rem]">
+      <div className="mx-auto flex max-w-[45.625rem] flex-col gap-4 pb-36 md:gap-6 md:pb-0">
         <GoBack />
         <div className="flex items-center justify-between rounded-lg bg-white p-6 dark:bg-fem-blue-700 md:px-8 md:shadow-soft">
           <div className="flex flex-grow items-center justify-between md:flex-grow-0 md:justify-normal md:gap-5">

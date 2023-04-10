@@ -1,5 +1,6 @@
 import invoiceData from "../store/data.json";
 import { ReactNode, createContext, useEffect, useState } from "react";
+import { useLocalStorage } from "./useLocalStorage";
 
 export interface InvoiceItem {
   name: string;
@@ -35,7 +36,7 @@ export interface Invoice {
 interface Context {
   isMobile: boolean;
   isDarkTheme: boolean | null;
-  toggleTheme: () => void | null;
+  toggleDarkTheme: () => void | null;
   invoices: Invoice[] | null;
 }
 
@@ -43,12 +44,18 @@ export const UserCtx = createContext<Context>({
   isMobile: window.matchMedia("(max-width: 767px)").matches,
   isDarkTheme: false,
   invoices: null,
-  toggleTheme: () => {},
+  toggleDarkTheme: () => {},
 });
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const toggleDarkTheme = () => setIsDarkTheme((prevTheme) => !prevTheme);
+  const [isDarkTheme, setIsDarkTheme] = useLocalStorage(
+    "invoiceAppDarkTheme",
+    false
+  );
+
+  function toggleDarkTheme(): void {
+    setIsDarkTheme(!isDarkTheme);
+  }
   const [isMobile, setIsMobile] = useState(
     window.matchMedia("(max-width: 767px)").matches
   );
@@ -77,7 +84,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     <UserCtx.Provider
       value={{
         isDarkTheme,
-        toggleTheme: toggleDarkTheme,
+        toggleDarkTheme,
         invoices,
         isMobile,
       }}
