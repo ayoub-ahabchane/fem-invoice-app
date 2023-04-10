@@ -20,14 +20,14 @@
     @apply rounded-3xl  px-[1.6em] py-[1em] text-heading-s-variant;
   }
   .button.muted {
-    @apply bg-fem-blue-100 text-fem-blue-300;
+    @apply bg-fem-blue-100 text-fem-blue-300 focus-within:bg-fem-blue-200 hover:bg-fem-blue-200;
   }
 
   .button.accent {
-    @apply bg-fem-violet-400 text-white;
+    @apply bg-fem-violet-400 text-white focus-within:bg-fem-violet-300 hover:bg-fem-violet-300;
   }
 
   .button.danger {
-    @apply bg-fem-red-400 text-white;
+    @apply bg-fem-red-400 text-white focus-within:bg-fem-red-300 hover:bg-fem-red-300;
   }
 }
