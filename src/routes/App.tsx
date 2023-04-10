@@ -22,7 +22,7 @@ function App() {
         id="modalPortal"
         className={`${
           !showModal && "hidden"
-        } absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-25 p-8 backdrop-blur-sm`}
+        } absolute inset-0 z-50 flex items-center justify-center bg-fem-blue-800 bg-opacity-50 p-8 backdrop-blur-sm`}
       ></div>
     </div>
   );

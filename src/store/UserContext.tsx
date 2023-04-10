@@ -90,6 +90,11 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     action: { type: string; id: string; paylod?: Invoice }
   ) {
     switch (action.type) {
+      case "send":
+        const pendingInvoice = state.find((item) => item.id === action.id);
+        const restOfInvoices = state.filter((item) => item.id !== action.id);
+        pendingInvoice!.status = "pending";
+        return [...restOfInvoices, pendingInvoice];
       case "paid":
         const paidInvoice = state.find((item) => item.id === action.id);
         const otherInvoices = state.filter((item) => item.id !== action.id);

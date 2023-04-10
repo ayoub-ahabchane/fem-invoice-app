@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { UserCtx } from "../store/UserContext";
 import GoBack from "../components/GoBack";
@@ -22,9 +22,6 @@ const Invoice = () => {
     useContext(UserCtx);
   const invoice = invoices?.find((item) => item.id == invoiceId);
 
-  const deleteRef = useRef(null);
-  const cancelRef = useRef(null);
-
   return (
     <main className="scr relative px-6 pb-8 pt-[6.5625rem] md:px-12 md:pt-[8.0625rem] lg:pt-[4.875rem]">
       <div className="mx-auto flex max-w-[45.625rem] flex-col gap-4 pb-36 md:gap-6 md:pb-0">
@@ -37,22 +34,33 @@ const Invoice = () => {
             <InvoiceStatus status={invoice!.status} />
           </div>
           <div className="hidden items-center gap-2 md:flex">
-            <button className="button muted">Edit</button>
+            {invoice?.status !== "paid" && (
+              <button className="button muted">Edit</button>
+            )}
             <button
               className="button danger"
               onClick={() => {
                 setShowModal(true);
-                cancelRef.current.focus();
               }}
             >
               Delete
             </button>
-            <button
-              onClick={() => setInvoices({ type: "paid", id: invoiceId })}
-              className="button accent"
-            >
-              Mark as Paid
-            </button>
+            {invoice?.status === "pending" && (
+              <button
+                onClick={() => setInvoices({ type: "paid", id: invoiceId })}
+                className="button accent"
+              >
+                Mark as Paid
+              </button>
+            )}
+            {invoice?.status === "draft" && (
+              <button
+                onClick={() => setInvoices({ type: "send", id: invoiceId })}
+                className="button accent"
+              >
+                Save & Send
+              </button>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-8 rounded-lg bg-white p-6 shadow-[0px_10px_10px_-10px_rgba(72,84,159,0.100397)] dark:bg-fem-blue-700 dark:shadow-[0px_10px_10px_-10px_rgba(0,0,0,0.10)] md:p-8">
@@ -126,8 +134,10 @@ const Invoice = () => {
         </div>
       </div>
       <div className="fixed inset-x-0 bottom-0 bg-white p-6 shadow-[0px_-20px_10px_-10px_rgba(72,84,159,0.100397)] dark:bg-fem-blue-700 dark:shadow-[0px_-20px_10px_-10px_rgba(0,0,0,0.10)] md:hidden">
-        <div className="flex items-center justify-between">
-          <button className="button muted">Edit</button>
+        <div className="flex items-center justify-end gap-2">
+          {invoice?.status !== "paid" && (
+            <button className="button muted">Edit</button>
+          )}
           <button
             className="button danger"
             onClick={() => {
@@ -136,12 +146,23 @@ const Invoice = () => {
           >
             Delete
           </button>
-          <button
-            onClick={() => setInvoices({ type: "paid", id: invoiceId })}
-            className="button accent"
-          >
-            Mark as Paid
-          </button>
+          {invoice?.status === "pending" && (
+            <button
+              onClick={() => setInvoices({ type: "paid", id: invoiceId })}
+              className="button accent"
+              disabled={invoice?.status === "paid"}
+            >
+              Mark as Paid
+            </button>
+          )}
+          {invoice?.status === "draft" && (
+            <button
+              onClick={() => setInvoices({ type: "send", id: invoiceId })}
+              className="button accent"
+            >
+              Save & Send
+            </button>
+          )}
         </div>
       </div>
 
@@ -150,7 +171,7 @@ const Invoice = () => {
           <div
             id="modal-deletion"
             aria-modal={true}
-            className="w-screen max-w-[30rem] rounded-lg bg-white p-12"
+            className="w-screen max-w-[30rem] rounded-lg bg-white p-12 dark:bg-fem-blue-700"
           >
             <h2 className="mb-3 text-heading-m">Confirm Deletion</h2>
             <p className="text-[0.8125rem] leading-[1.7em] text-fem-blue-400">
@@ -160,7 +181,6 @@ const Invoice = () => {
             <div className="mt-4 flex w-full justify-end gap-2">
               <button
                 className="button muted"
-                ref={cancelRef}
                 onClick={() => {
                   setShowModal(false);
                 }}
@@ -169,7 +189,6 @@ const Invoice = () => {
               </button>
               <button
                 className="button danger"
-                ref={deleteRef}
                 onClick={() => {
                   setInvoices({ type: "delete", id: invoiceId });
                   navigate("/");
