@@ -1,6 +1,8 @@
 import invoiceData from "../store/data.json";
 import {
+  Dispatch,
   ReactNode,
+  SetStateAction,
   createContext,
   useEffect,
   useReducer,
@@ -14,7 +16,7 @@ export interface InvoiceItem {
   price: number;
   total: number;
 }
-interface InvoiceAddress {
+export interface InvoiceAddress {
   street: string;
   city: string;
   postCode: string;
@@ -45,6 +47,8 @@ interface Context {
   toggleDarkTheme: () => void | null;
   invoices: Invoice[] | null;
   setInvoices: React.DispatchWithoutAction;
+  showModal: boolean;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
 export const UserCtx = createContext<Context>({
@@ -53,6 +57,8 @@ export const UserCtx = createContext<Context>({
   invoices: null,
   toggleDarkTheme: () => {},
   setInvoices: () => {},
+  showModal: false,
+  setShowModal: () => {},
 });
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
@@ -73,6 +79,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     "invoiceAppDarkTheme",
     false
   );
+  const [showModal, setShowModal] = useState(false);
 
   function toggleDarkTheme(): void {
     setIsDarkTheme(!isDarkTheme);
@@ -117,7 +124,9 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         toggleDarkTheme,
         invoices,
         isMobile,
-        setInvoices: setInvoices,
+        setInvoices,
+        showModal,
+        setShowModal,
       }}
     >
       {children}
