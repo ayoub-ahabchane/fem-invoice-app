@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { UserCtx } from "../store/UserContext";
 import GoBack from "../components/GoBack";
@@ -17,11 +17,30 @@ const Invoice = () => {
     params: { invoiceId },
   } = useLoaderData();
   const navigate = useNavigate();
-
   const { invoices, setInvoices, showModal, setShowModal } =
     useContext(UserCtx);
   const invoice = invoices?.find((item) => item.id == invoiceId);
+  const cancelRef = useRef();
+  const deleteRef = useRef();
+  const modalRef = useRef();
+  useEffect(() => {
+    function handleKeydown(e: KeyboardEvent) {
+      if (e.key === "Tab" && e.target === deleteRef.current) {
+        e.preventDefault();
+        cancelRef.current.focus();
+      } else if (e.key === "Tab" && e.target === cancelRef.current) {
+        e.preventDefault();
+        deleteRef.current.focus();
+      } else if (e.key === "Escape") {
+        setShowModal(false);
+      }
+    }
 
+    if (showModal) {
+      window.addEventListener("keydown", handleKeydown);
+    }
+    return () => window.removeEventListener("keydown", handleKeydown);
+  }, [showModal]);
   return (
     <main className="scr relative px-6 pb-8 pt-[6.5625rem] md:px-12 md:pt-[8.0625rem] lg:pt-[4.875rem]">
       <div className="mx-auto flex max-w-[45.625rem] flex-col gap-4 pb-36 md:gap-6 md:pb-0">
@@ -169,6 +188,7 @@ const Invoice = () => {
       {showModal &&
         createPortal(
           <div
+            ref={modalRef}
             id="modal-deletion"
             aria-modal={true}
             className="w-screen max-w-[30rem] rounded-lg bg-white p-12 dark:bg-fem-blue-700"
@@ -180,6 +200,8 @@ const Invoice = () => {
             </p>
             <div className="mt-4 flex w-full justify-end gap-2">
               <button
+                autoFocus
+                ref={cancelRef}
                 className="button muted"
                 onClick={() => {
                   setShowModal(false);
@@ -188,6 +210,7 @@ const Invoice = () => {
                 Cancel
               </button>
               <button
+                ref={deleteRef}
                 className="button danger"
                 onClick={() => {
                   setInvoices({ type: "delete", id: invoiceId });
