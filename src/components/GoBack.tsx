@@ -1,15 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const GoBack = () => {
-  const navigate = useNavigate();
+const GoBack = ({ handleClick }: { handleClick: () => void }) => {
   return (
     <button
       type="button"
       className="flex items-center gap-6 pb-2 text-heading-s-variant "
-      onClick={() => {
-        navigate(-1);
-      }}
+      onClick={handleClick}
     >
       <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg">
         <path

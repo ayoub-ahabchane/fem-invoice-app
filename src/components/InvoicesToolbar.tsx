@@ -1,6 +1,8 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import Filter from "./Filter";
-import { Invoice } from "../store/UserContext";
+import { Invoice, UserCtx } from "../store/UserContext";
+import { createPortal } from "react-dom";
+import InvoiceForm, { FormType } from "./InvoiceForm";
 export function InvoicesToolbar({
   isMobile,
   filteredInvoices,
@@ -14,6 +16,8 @@ export function InvoicesToolbar({
   selectedFilters: string[];
   setSelectedFilters: React.Dispatch<SetStateAction<string[]>>;
 }) {
+  const { showInvoiceForm, setShowInvoiceForm } = useContext(UserCtx);
+
   return (
     <header className="sticky top-[4.5rem] flex items-center justify-between bg-gradient-to-b from-fem-light from-85% to-transparent py-8 dark:bg-gradient-to-b dark:from-fem-blue-800 dark:from-85% dark:to-transparent md:top-20 md:py-14 lg:top-0 lg:pt-[4.875rem]">
       <div>
@@ -42,7 +46,12 @@ export function InvoicesToolbar({
           selectedOptions={selectedFilters}
           setSelectedOptions={setSelectedFilters}
         />
-        <button className="flex items-center rounded-3xl bg-fem-violet-400 p-1.5 text-heading-s text-white focus-within:bg-fem-violet-300 hover:bg-fem-violet-300">
+        <button
+          className="flex items-center rounded-3xl bg-fem-violet-400 p-1.5 text-heading-s text-white focus-within:bg-fem-violet-300 hover:bg-fem-violet-300"
+          onClick={() => {
+            setShowInvoiceForm(true);
+          }}
+        >
           <span className="flex aspect-square w-8 items-center justify-center rounded-full bg-white">
             <svg width="11" height="11" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -57,6 +66,11 @@ export function InvoicesToolbar({
           </span>
         </button>
       </div>
+      {showInvoiceForm &&
+        createPortal(
+          <InvoiceForm type={FormType.new} />,
+          document.getElementById("formPortal")!
+        )}
     </header>
   );
 }

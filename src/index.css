@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    @apply transition-colors duration-150 ease-out;
+  }
+
   body {
     @apply bg-fem-light text-fem-blue-800 dark:bg-fem-blue-800 dark:text-white;
   }
@@ -30,10 +34,47 @@
   .button.danger {
     @apply bg-fem-red-400 text-white focus-within:bg-fem-red-300 hover:bg-fem-red-300;
   }
+
+  .button.secondary {
+    @apply bg-[#373B53] text-fem-blue-400 focus-within:bg-fem-blue-800 hover:bg-fem-blue-800;
+  }
+
+  input,
+  select {
+    @apply block w-full rounded border border-fem-blue-200 bg-transparent px-5 py-4 text-heading-s-variant caret-fem-violet-400 focus-visible:outline-1 focus-visible:outline-fem-violet-400 dark:border-fem-blue-500 dark:bg-fem-blue-700;
+  }
+
+  label:has(+ :is(input:disabled)) {
+    @apply opacity-50;
+  }
+
+  input:disabled {
+    @apply opacity-50;
+  }
+
+  input[type="number"] {
+    appearance: textfield;
+  }
+
+  .input-label {
+    @apply muted-heading block capitalize dark:text-fem-blue-400;
+  }
+
+  .warning {
+    @apply text-[0.8125rem] font-medium leading-none text-fem-red-400 dark:text-fem-red-300;
+  }
 }
 
 @layer utilities {
   .button:disabled {
-    @apply bg-fem-blue-100 text-fem-blue-400 opacity-40 focus-within:bg-fem-blue-100 hover:bg-fem-blue-100 dark:bg-fem-blue-500 dark:text-white dark:focus-within:bg-fem-blue-500 dark:hover:bg-fem-blue-500;
+    @apply cursor-default bg-fem-blue-100 text-fem-blue-400 opacity-70 focus-within:bg-fem-blue-100 hover:bg-fem-blue-100 dark:bg-fem-blue-500 dark:text-white dark:focus-within:bg-fem-blue-500 dark:hover:bg-fem-blue-500;
+  }
+
+  .heading-placeholder {
+    @apply text-heading-s-variant font-medium text-fem-blue-400 opacity-70;
+  }
+
+  .input-warning {
+    @apply border-fem-red-400 dark:border-fem-red-300;
   }
 }

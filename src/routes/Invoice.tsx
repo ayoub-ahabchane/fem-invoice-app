@@ -1,14 +1,18 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { UserCtx } from "../store/UserContext";
+import {
+  InvoiceStatus as InvoiceStatusEnum,
+  UserCtx,
+} from "../store/UserContext";
 import GoBack from "../components/GoBack";
-import { InvoiceStatus } from "../components/StatusBadge";
 import { toEnglishDate } from "../store/utils";
 import { MobileInvoiceLines } from "../components/mobileInvoiceLines";
 import { LargeInvoiceLines } from "../components/LargeInvoiceLines";
 import { createPortal } from "react-dom";
+import InvoiceForm, { FormType } from "../components/InvoiceForm";
+import { InvoiceStatus } from "../components/StatusBadge";
 
-export async function loader({ params }) {
+export async function loader({ params }: { params: any }) {
   return { params };
 }
 
@@ -17,12 +21,18 @@ const Invoice = () => {
     params: { invoiceId },
   } = useLoaderData();
   const navigate = useNavigate();
-  const { invoices, setInvoices, showModal, setShowModal } =
-    useContext(UserCtx);
+  const {
+    invoices,
+    setInvoices,
+    showModal,
+    setShowModal,
+    showInvoiceForm,
+    setShowInvoiceForm,
+  } = useContext(UserCtx);
   const invoice = invoices?.find((item) => item.id == invoiceId);
-  const cancelRef = useRef();
-  const deleteRef = useRef();
-  const modalRef = useRef();
+  const cancelRef = useRef<HTMLDivElement>();
+  const deleteRef = useRef<HTMLDivElement>();
+  const modalRef = useRef<HTMLDivElement>();
   useEffect(() => {
     function handleKeydown(e: KeyboardEvent) {
       if (e.key === "Tab" && e.target === deleteRef.current) {
@@ -31,8 +41,6 @@ const Invoice = () => {
       } else if (e.key === "Tab" && e.target === cancelRef.current) {
         e.preventDefault();
         deleteRef.current.focus();
-      } else if (e.key === "Escape") {
-        setShowModal(false);
       }
     }
 
@@ -41,10 +49,15 @@ const Invoice = () => {
     }
     return () => window.removeEventListener("keydown", handleKeydown);
   }, [showModal]);
+
   return (
-    <main className="scr relative px-6 pb-8 pt-[6.5625rem] md:px-12 md:pt-[8.0625rem] lg:pt-[4.875rem]">
+    <main className="relative px-6 pb-8 pt-[6.5625rem] md:px-12 md:pt-[8.0625rem] lg:pt-[4.875rem]">
       <div className="mx-auto flex max-w-[45.625rem] flex-col gap-4 pb-36 md:gap-6 md:pb-0">
-        <GoBack />
+        <GoBack
+          handleClick={() => {
+            navigate(-1);
+          }}
+        />
         <div className="flex items-center justify-between rounded-lg bg-white p-6 dark:bg-fem-blue-700 md:px-8 md:shadow-soft">
           <div className="flex flex-grow items-center justify-between md:flex-grow-0 md:justify-normal md:gap-5">
             <span className="text-[0.8125rem] leading-none text-fem-blue-400">
@@ -54,7 +67,14 @@ const Invoice = () => {
           </div>
           <div className="hidden items-center gap-2 md:flex">
             {invoice?.status !== "paid" && (
-              <button className="button muted">Edit</button>
+              <button
+                className="button muted"
+                onClick={() => {
+                  setShowInvoiceForm(true);
+                }}
+              >
+                Edit
+              </button>
             )}
             <button
               className="button danger"
@@ -76,6 +96,11 @@ const Invoice = () => {
               <button
                 onClick={() => setInvoices({ type: "send", id: invoiceId })}
                 className="button accent"
+                disabled={Object.values(invoice).some(
+                  (value) =>
+                    value === "" ||
+                    Object.values(value).some((nestedVal) => nestedVal === "")
+                )}
               >
                 Save & Send
               </button>
@@ -89,13 +114,53 @@ const Invoice = () => {
                 <span className="text-fem-blue-300">#</span>
                 {invoice!.id}
               </h1>
-              <p className="muted-heading">{invoice?.description}</p>
+              <p className="muted-heading">
+                {invoice!.description ?? (
+                  <p className="heading-placeholder">No description</p>
+                )}
+              </p>
             </div>
             <address className="muted-heading flex flex-col gap-1.5 not-italic md:text-right">
-              <p>{invoice!.senderAddress.street}</p>
-              <p> {invoice!.senderAddress.city}</p>
-              <p>{invoice!.senderAddress.postCode}</p>
-              <p>{invoice!.senderAddress.country}</p>
+              <p
+                className={`${
+                  !invoice!.senderAddress.street &&
+                  "heading-placeholder text-[0.8125rem]"
+                }`}
+              >
+                {invoice!.senderAddress.street
+                  ? invoice!.senderAddress.street
+                  : "Street not provided"}
+              </p>
+              <p
+                className={`${
+                  !invoice!.senderAddress.city &&
+                  "heading-placeholder text-[0.8125rem]"
+                }`}
+              >
+                {invoice!.senderAddress.city
+                  ? invoice!.senderAddress.city
+                  : "City not provided"}
+              </p>
+              <p
+                className={`${
+                  !invoice!.senderAddress.postCode &&
+                  "heading-placeholder text-[0.8125rem]"
+                }`}
+              >
+                {invoice!.senderAddress.postCode
+                  ? invoice!.senderAddress.postCode
+                  : "Postcode not provided"}
+              </p>
+              <p
+                className={`${
+                  !invoice!.senderAddress.country &&
+                  "heading-placeholder text-[0.8125rem]"
+                }`}
+              >
+                {invoice!.senderAddress.country
+                  ? invoice!.senderAddress.country
+                  : "Country not provided"}
+              </p>
             </address>
           </section>
           <section className="grid grid-cols-2 grid-rows-[1fr_1fr_auto] md:grid-cols-[5fr_5fr_6fr] md:grid-rows-[auto_auto]">
@@ -117,13 +182,42 @@ const Invoice = () => {
                 {invoice!.clientName}
               </p>
               <address className="muted-heading flex flex-col gap-1.5 not-italic">
-                <p>{invoice!.clientAddress.street}</p>
-
-                <p> {invoice!.clientAddress.city}</p>
-
-                <p>{invoice!.clientAddress.postCode}</p>
-
-                <p>{invoice!.clientAddress.country}</p>
+                <p
+                  className={`${
+                    !invoice!.clientAddress.street && "heading-placeholder"
+                  }`}
+                >
+                  {invoice!.clientAddress.street
+                    ? invoice!.clientAddress.street
+                    : "Street not provided"}
+                </p>
+                <p
+                  className={`${
+                    !invoice!.clientAddress.city && "heading-placeholder"
+                  }`}
+                >
+                  {invoice!.clientAddress.city
+                    ? invoice!.clientAddress.city
+                    : "City not provided"}
+                </p>
+                <p
+                  className={`${
+                    !invoice!.clientAddress.postCode && "heading-placeholder"
+                  }`}
+                >
+                  {invoice!.clientAddress.postCode
+                    ? invoice!.clientAddress.postCode
+                    : "Postcode not provided"}
+                </p>
+                <p
+                  className={`${
+                    !invoice!.clientAddress.country && "heading-placeholder"
+                  }`}
+                >
+                  {invoice!.clientAddress.country
+                    ? invoice!.clientAddress.country
+                    : "Country not provided"}
+                </p>
               </address>
             </article>
             <article className="col-span-2 col-start-1 row-start-3 pt-8 md:col-start-3 md:row-span-2 md:row-start-1 md:pt-0">
@@ -136,9 +230,7 @@ const Invoice = () => {
                   {invoice!.clientEmail}
                 </a>
               ) : (
-                <p className="text-heading-s-variant text-fem-blue-400 opacity-40">
-                  No email
-                </p>
+                <p className="heading-placeholder">Email not provided</p>
               )}
             </article>
           </section>
@@ -152,10 +244,17 @@ const Invoice = () => {
           />
         </div>
       </div>
-      <div className="fixed inset-x-0 bottom-0 bg-white p-6 shadow-[0px_-20px_10px_-10px_rgba(72,84,159,0.100397)] dark:bg-fem-blue-700 dark:shadow-[0px_-20px_10px_-10px_rgba(0,0,0,0.10)] md:hidden">
+      <div className="fixed inset-x-0 bottom-0 flex items-center justify-end gap-1.5 bg-gradient-to-t from-white from-85% to-transparent px-6 pb-8 pt-10 dark:bg-gradient-to-t dark:from-fem-blue-800 dark:from-80% dark:to-transparent md:hidden">
         <div className="flex items-center justify-end gap-2">
           {invoice?.status !== "paid" && (
-            <button className="button muted">Edit</button>
+            <button
+              className="button muted"
+              onClick={() => {
+                setShowInvoiceForm(true);
+              }}
+            >
+              Edit
+            </button>
           )}
           <button
             className="button danger"
@@ -165,21 +264,12 @@ const Invoice = () => {
           >
             Delete
           </button>
-          {invoice?.status === "pending" && (
+          {invoice?.status === InvoiceStatusEnum.PENDING && (
             <button
               onClick={() => setInvoices({ type: "paid", id: invoiceId })}
               className="button accent"
-              disabled={invoice?.status === "paid"}
             >
               Mark as Paid
-            </button>
-          )}
-          {invoice?.status === "draft" && (
-            <button
-              onClick={() => setInvoices({ type: "send", id: invoiceId })}
-              className="button accent"
-            >
-              Save & Send
             </button>
           )}
         </div>
@@ -223,6 +313,11 @@ const Invoice = () => {
             </div>
           </div>,
           document.getElementById("modalPortal")!
+        )}
+      {showInvoiceForm &&
+        createPortal(
+          <InvoiceForm type={FormType.edit} invoice={invoice} />,
+          document.getElementById("formPortal")!
         )}
     </main>
   );

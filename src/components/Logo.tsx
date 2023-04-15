@@ -1,8 +1,16 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserCtx } from "../store/UserContext";
 
 const Logo = () => {
+  const { setShowModal, setShowInvoiceForm } = useContext(UserCtx);
+
   return (
     <Link
+      onClick={() => {
+        setShowModal(false);
+        setShowInvoiceForm(false);
+      }}
       to={"/"}
       className="relative aspect-square w-[4.5rem] shrink-0 overflow-hidden rounded-r-[1.25rem] bg-fem-violet-400 md:w-20 lg:w-[6.4375rem]"
     >

@@ -4,7 +4,7 @@ import { InvoiceCard } from "../components/InvoiceCard";
 import { InvoicesToolbar } from "../components/InvoicesToolbar";
 
 const Invoices = () => {
-  const { invoices, isMobile } = useContext(UserCtx);
+  const { invoices, isMobile, showInvoiceForm } = useContext(UserCtx);
   const filterOptions = [
     ...new Set(invoices?.map((invoice) => invoice.status)),
   ];
@@ -20,7 +20,7 @@ const Invoices = () => {
   });
 
   return (
-    <main className="px-6 pb-8 pt-[4.5rem] md:px-12 md:pt-20 lg:pt-0">
+    <main className="min-h-screen px-6 pb-8 pt-[4.5rem] md:px-12 md:pt-20 lg:pt-0">
       <div className="mx-auto max-w-[45.625rem]">
         <InvoicesToolbar
           isMobile={isMobile}

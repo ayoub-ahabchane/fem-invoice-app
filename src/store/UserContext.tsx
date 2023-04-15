@@ -22,6 +22,11 @@ export interface InvoiceAddress {
   postCode: string;
   country: string;
 }
+export enum InvoiceStatus {
+  DRAFT = "draft",
+  PENDING = "pending",
+  PAID = "paid",
+}
 export interface Invoice {
   id: string;
   createdAt: Date;
@@ -30,35 +35,40 @@ export interface Invoice {
   paymentTerms: number;
   clientName: string;
   clientEmail: string;
-  status: string;
-  senderAddress: {
-    street: string;
-    city: string;
-    postCode: string;
-    country: string;
-  };
+  status: InvoiceStatus;
+  senderAddress: InvoiceAddress;
   clientAddress: InvoiceAddress;
   items: InvoiceItem[];
   total: number;
+}
+
+interface InvoiceReducerAction {
+  type: string;
+  id: string;
+  payload?: Invoice;
 }
 interface Context {
   isMobile: boolean;
   isDarkTheme: boolean | null;
   toggleDarkTheme: () => void | null;
-  invoices: Invoice[] | null;
-  setInvoices: React.DispatchWithoutAction;
+  invoices: Invoice[] | [];
+  setInvoices: React.ReducerWithoutAction<any>;
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
+  showInvoiceForm: boolean;
+  setShowInvoiceForm: Dispatch<SetStateAction<boolean>>;
 }
 
 export const UserCtx = createContext<Context>({
   isMobile: window.matchMedia("(max-width: 767px)").matches,
   isDarkTheme: false,
-  invoices: null,
+  invoices: [],
   toggleDarkTheme: () => {},
   setInvoices: () => {},
   showModal: false,
   setShowModal: () => {},
+  showInvoiceForm: false,
+  setShowInvoiceForm: () => {},
 });
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
@@ -80,32 +90,31 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     false
   );
   const [showModal, setShowModal] = useState(false);
-
+  const [showInvoiceForm, setShowInvoiceForm] = useState(false);
   function toggleDarkTheme(): void {
     setIsDarkTheme(!isDarkTheme);
   }
 
-  function invoicesReducer(
-    state: Invoice[],
-    action: { type: string; id: string; paylod?: Invoice }
-  ) {
+  function invoicesReducer(state: Invoice[], action: InvoiceReducerAction) {
     switch (action.type) {
       case "send":
         const pendingInvoice = state.find((item) => item.id === action.id);
         const restOfInvoices = state.filter((item) => item.id !== action.id);
-        pendingInvoice!.status = "pending";
+        pendingInvoice!.status = InvoiceStatus.PENDING;
         return [...restOfInvoices, pendingInvoice];
       case "paid":
         const paidInvoice = state.find((item) => item.id === action.id);
         const otherInvoices = state.filter((item) => item.id !== action.id);
-        paidInvoice!.status = "paid";
+        paidInvoice!.status = InvoiceStatus.PAID;
         return [...otherInvoices, paidInvoice];
       case "delete":
         const filteredInvoices = state.filter((item) => item.id !== action.id);
         return filteredInvoices;
       case "edit":
         const uneditedInvoices = state.filter((item) => item.id !== action.id);
-        return [...uneditedInvoices, action.paylod];
+        return [...uneditedInvoices, action.payload];
+      case "add":
+        return [...state, action.payload];
       default:
         break;
     }
@@ -132,6 +141,8 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         setInvoices,
         showModal,
         setShowModal,
+        showInvoiceForm,
+        setShowInvoiceForm,
       }}
     >
       {children}
