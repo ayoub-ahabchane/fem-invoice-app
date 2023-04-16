@@ -36,7 +36,7 @@
   }
 
   .button.secondary {
-    @apply bg-[#373B53] text-fem-blue-400 focus-within:bg-fem-blue-800 hover:bg-fem-blue-800;
+    @apply bg-[#373B53] text-fem-blue-400 focus-within:bg-fem-blue-800 hover:bg-fem-blue-800 dark:text-fem-light dark:focus-within:bg-fem-blue-700 dark:hover:bg-fem-blue-700;
   }
 
   input,
@@ -67,7 +67,7 @@
 
 @layer utilities {
   .button:disabled {
-    @apply cursor-default bg-fem-blue-100 text-fem-blue-400 opacity-70 focus-within:bg-fem-blue-100 hover:bg-fem-blue-100 dark:bg-fem-blue-500 dark:text-white dark:focus-within:bg-fem-blue-500 dark:hover:bg-fem-blue-500;
+    @apply cursor-default bg-fem-blue-100 text-fem-blue-400 opacity-60 focus-within:bg-fem-blue-100 hover:bg-fem-blue-100 dark:bg-fem-blue-500  dark:focus-within:bg-fem-blue-500 dark:hover:bg-fem-blue-500;
   }
 
   .heading-placeholder {

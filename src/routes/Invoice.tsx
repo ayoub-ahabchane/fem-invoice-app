@@ -56,7 +56,7 @@ const Invoice = () => {
       <div className="mx-auto flex max-w-[45.625rem] flex-col gap-4 pb-36 md:gap-6 md:pb-0">
         <GoBack
           handleClick={() => {
-            navigate(-1);
+            navigate("/invoices");
           }}
         />
         <div className="flex items-center justify-between rounded-lg bg-white p-6 dark:bg-fem-blue-700 md:px-8 md:shadow-soft">
