@@ -17,7 +17,7 @@ const Logo = () => {
       <div className="h-1/2 bg-fem-violet-400"></div>
       <div className="h-1/2 rounded-tl-[1.25rem] bg-fem-violet-300"></div>
 
-      <div className="absolute inset-0 left-1/2 top-1/2 aspect-square w-[1.625rem] -translate-x-1/2 -translate-y-1/2 bg-[image:url('./src/assets/logo.svg')] bg-contain bg-center bg-no-repeat md:w-[1.875rem] lg:w-10"></div>
+      <div className="absolute inset-0 left-1/2 top-1/2 aspect-square w-[1.625rem] -translate-x-1/2 -translate-y-1/2 bg-logo bg-contain bg-center bg-no-repeat md:w-[1.875rem] lg:w-10"></div>
     </Link>
   );
 };

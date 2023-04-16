@@ -109,6 +109,9 @@ export default {
         fadeOutUp: "slideUp 0.3s ease-out forwards",
         fadeInDown: "slideDown 0.3s ease-out forwards",
       },
+      backgroundImage: {
+        logo: "url('/src/assets/logo.svg')",
+      },
     },
   },
   plugins: [],
