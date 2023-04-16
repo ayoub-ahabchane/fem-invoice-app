@@ -37,6 +37,7 @@ const Invoices = () => {
                 const { id, clientName, paymentDue, status, total } = invoice;
                 return (
                   <InvoiceCard
+                    layoutId={id}
                     key={id}
                     id={id}
                     clientName={clientName}

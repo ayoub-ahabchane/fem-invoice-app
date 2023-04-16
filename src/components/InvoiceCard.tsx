@@ -1,21 +1,28 @@
 import { Link } from "react-router-dom";
 import { InvoiceStatus } from "./StatusBadge";
 import { asCurrency, toEnglishDate } from "../store/utils";
+import { motion } from "framer-motion";
 export function InvoiceCard({
   id,
   clientName,
   total,
   paymentDue,
   status,
+  layoutId,
 }: {
   id: string;
   clientName: string;
   total: number;
   paymentDue: Date;
   status: string;
+  layoutId: string;
 }) {
   return (
-    <article className="grid grid-cols-2 grid-rows-[repeat(3,_auto)] items-center rounded-lg border border-transparent bg-white p-6 focus-within:border-fem-violet-400 hover:border-fem-violet-400 dark:bg-fem-blue-700 md:grid-cols-5 md:grid-rows-1 md:justify-items-center md:gap-x-5 md:p-4 md:px-6 md:shadow-soft">
+    <motion.article
+      transition={{ duration: 0.15, ease: "easeOut" }}
+      layoutId={layoutId}
+      className="-z-0 grid grid-cols-2 grid-rows-[repeat(3,_auto)] items-center rounded-lg border border-transparent bg-white p-6 focus-within:border-fem-violet-400 hover:border-fem-violet-400 dark:bg-fem-blue-700 md:grid-cols-5 md:grid-rows-1 md:justify-items-center md:gap-x-5 md:p-4 md:px-6 md:shadow-soft"
+    >
       <Link
         to={`/invoices/${id}`}
         aria-label={`${clientName}'s invoice details`}
@@ -52,6 +59,6 @@ export function InvoiceCard({
           />
         </svg>
       </Link>
-    </article>
+    </motion.article>
   );
 }

@@ -96,9 +96,7 @@ const Invoice = () => {
                           t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
                         }`}
                       >
-                        <p className="px-4">
-                          💵 Invoice <span>#{invoice!.id}</span> has been paid
-                        </p>
+                        <p className="px-4">💵 Invoice paid</p>
                       </div>
                     ),
                     { position: "top-center" }
@@ -111,7 +109,21 @@ const Invoice = () => {
             )}
             {invoice?.status === "draft" && (
               <button
-                onClick={() => setInvoices({ type: "send", id: invoiceId })}
+                onClick={() => {
+                  setInvoices({ type: "send", id: invoiceId });
+                  toast.custom(
+                    (t) => (
+                      <span
+                        className={`flex items-center rounded-[2rem] bg-fem-violet-400 p-1.5 text-heading-s text-white shadow-xl ${
+                          t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
+                        }`}
+                      >
+                        <p className="px-4">✉️ Invoice sent!</p>
+                      </span>
+                    ),
+                    { position: "top-center" }
+                  );
+                }}
                 className="button accent"
                 disabled={Object.values(invoice).some(
                   (value) =>
@@ -292,9 +304,7 @@ const Invoice = () => {
                         t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
                       }`}
                     >
-                      <p className="px-4">
-                        💵 Invoice <span>#{invoice!.id}</span> has been paid
-                      </p>
+                      <p className="px-4">💵 Invoice paid</p>
                     </span>
                   ),
                   { position: "top-center" }
@@ -303,6 +313,33 @@ const Invoice = () => {
               className="button accent"
             >
               Mark as Paid
+            </button>
+          )}
+          {invoice?.status === "draft" && (
+            <button
+              onClick={() => {
+                setInvoices({ type: "send", id: invoiceId });
+                toast.custom(
+                  (t) => (
+                    <span
+                      className={`flex items-center rounded-[2rem] bg-fem-violet-400 p-1.5 text-heading-s text-white shadow-xl ${
+                        t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
+                      }`}
+                    >
+                      <p className="px-4">✉️ Invoice sent!</p>
+                    </span>
+                  ),
+                  { position: "top-center" }
+                );
+              }}
+              className="button accent"
+              disabled={Object.values(invoice).some(
+                (value) =>
+                  value === "" ||
+                  Object.values(value).some((nestedVal) => nestedVal === "")
+              )}
+            >
+              Save & Send
             </button>
           )}
         </div>

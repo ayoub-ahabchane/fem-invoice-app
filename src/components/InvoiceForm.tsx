@@ -16,6 +16,7 @@ export enum FormType {
   new = "NEW",
   edit = "EDIT",
 }
+import { motion, AnimatePresence } from "framer-motion";
 
 export interface InvoiceFormType {
   id: string;

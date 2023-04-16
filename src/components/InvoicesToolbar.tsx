@@ -19,7 +19,7 @@ export function InvoicesToolbar({
   const { showInvoiceForm, setShowInvoiceForm, invoices } = useContext(UserCtx);
 
   return (
-    <header className="sticky top-[4.5rem] flex items-center justify-between bg-gradient-to-b from-fem-light from-85% to-transparent py-8 dark:bg-gradient-to-b dark:from-fem-blue-800 dark:from-85% dark:to-transparent md:top-20 md:py-14 lg:top-0 lg:pt-[4.875rem]">
+    <header className="sticky top-[4.5rem] z-30 flex items-center justify-between bg-gradient-to-b from-fem-light from-85% to-transparent py-8 dark:bg-gradient-to-b dark:from-fem-blue-800 dark:from-85% dark:to-transparent md:top-20 md:py-14 lg:top-0 lg:pt-[4.875rem]">
       <div>
         <h1 className="text-heading-m leading-none md:mb-1.5 md:text-heading-l">
           Invoices
