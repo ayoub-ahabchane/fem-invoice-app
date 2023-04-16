@@ -57,7 +57,7 @@
   }
 
   .input-label {
-    @apply muted-heading block capitalize dark:text-fem-blue-400;
+    @apply muted-heading block dark:text-fem-blue-400;
   }
 
   .warning {
@@ -76,5 +76,9 @@
 
   .input-warning {
     @apply border-fem-red-400 dark:border-fem-red-300;
+  }
+
+  .toast {
+    left: 0;
   }
 }

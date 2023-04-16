@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useContext, useEffect } from "react";
 import { UserCtx } from "../store/UserContext";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const {
@@ -37,6 +38,9 @@ function App() {
         (showModal || showInvoiceForm) && "h-screen overflow-hidden"
       }`}
     >
+      <div>
+        <Toaster />
+      </div>
       <Navbar />
       <Outlet />
 

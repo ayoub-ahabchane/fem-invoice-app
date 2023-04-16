@@ -44,7 +44,7 @@ export function InvoiceLineForm({
   return (
     <div
       key={field.id}
-      className="grid grid-cols-[3fr_4fr_4fr_auto] grid-rows-2 gap-x-4 gap-y-6 md:grid-cols-[4fr_1fr_2fr_2fr_auto] md:grid-rows-1"
+      className="grid grid-cols-[3fr_4fr_4fr_auto] grid-rows-2 gap-x-4 gap-y-6 md:grid-cols-[5fr_2fr_3fr_3fr_auto] md:grid-rows-1"
     >
       <div className="col-span-full row-span-1 md:col-span-1 md:col-start-1 md:row-start-1">
         {/* <label

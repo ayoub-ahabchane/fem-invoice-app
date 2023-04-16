@@ -40,7 +40,7 @@ export function InvoiceCard({
       <Link
         to={`/invoices/${id}`}
         aria-label={`${clientName}'s invoice details`}
-        className="col-start-6 hidden md:inline-block"
+        className="col-start-6 hidden px-2 py-3.5 md:inline-block"
       >
         <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg">
           <path

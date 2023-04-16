@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { UserCtx } from "../store/UserContext";
 import { InvoiceCard } from "../components/InvoiceCard";
 import { InvoicesToolbar } from "../components/InvoicesToolbar";
+import { IllustrationEmpty } from "../components/IllustrationEmpty";
 
 const Invoices = () => {
   const { invoices, isMobile, showInvoiceForm } = useContext(UserCtx);
@@ -29,7 +30,7 @@ const Invoices = () => {
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
         />
-        {invoices ? (
+        {invoices.length > 0 ? (
           <ul className=" flex flex-col gap-4">
             {filteredInvoices &&
               filteredInvoices.map((invoice) => {
@@ -47,7 +48,17 @@ const Invoices = () => {
               })}
           </ul>
         ) : (
-          <p>Woops, there's none</p>
+          <div className="mt-24 flex flex-col items-center">
+            <IllustrationEmpty />
+            <h1 className="mb-6 mt-16 text-center text-heading-m">
+              There is nothing here
+            </h1>
+            <p className="text-center text-fem-blue-400 dark:text-fem-blue-200">
+              Create an invoice by clicking the
+              <br />
+              New Invoice button and get started
+            </p>
+          </div>
         )}
       </div>
     </main>

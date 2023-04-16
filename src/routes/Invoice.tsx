@@ -11,6 +11,7 @@ import { LargeInvoiceLines } from "../components/LargeInvoiceLines";
 import { createPortal } from "react-dom";
 import InvoiceForm, { FormType } from "../components/InvoiceForm";
 import { InvoiceStatus } from "../components/StatusBadge";
+import { toast } from "react-hot-toast";
 
 export async function loader({ params }: { params: any }) {
   return { params };
@@ -86,7 +87,23 @@ const Invoice = () => {
             </button>
             {invoice?.status === "pending" && (
               <button
-                onClick={() => setInvoices({ type: "paid", id: invoiceId })}
+                onClick={() => {
+                  setInvoices({ type: "paid", id: invoiceId });
+                  toast.custom(
+                    (t) => (
+                      <div
+                        className={`flex items-center rounded-[2rem] bg-fem-violet-400 p-1.5 text-heading-s text-white shadow-xl ${
+                          t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
+                        }`}
+                      >
+                        <p className="px-4">
+                          💵 Invoice <span>#{invoice!.id}</span> has been paid
+                        </p>
+                      </div>
+                    ),
+                    { position: "top-center" }
+                  );
+                }}
                 className="button accent"
               >
                 Mark as Paid
@@ -266,7 +283,23 @@ const Invoice = () => {
           </button>
           {invoice?.status === InvoiceStatusEnum.PENDING && (
             <button
-              onClick={() => setInvoices({ type: "paid", id: invoiceId })}
+              onClick={() => {
+                setInvoices({ type: "paid", id: invoiceId });
+                toast.custom(
+                  (t) => (
+                    <span
+                      className={`flex items-center rounded-[2rem] bg-fem-violet-400 p-1.5 text-heading-s text-white shadow-xl ${
+                        t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
+                      }`}
+                    >
+                      <p className="px-4">
+                        💵 Invoice <span>#{invoice!.id}</span> has been paid
+                      </p>
+                    </span>
+                  ),
+                  { position: "top-center" }
+                );
+              }}
               className="button accent"
             >
               Mark as Paid
@@ -304,6 +337,22 @@ const Invoice = () => {
                 className="button danger"
                 onClick={() => {
                   setInvoices({ type: "delete", id: invoiceId });
+                  toast.custom(
+                    (t) => (
+                      <div
+                        className={`flex items-center rounded-[2rem] bg-fem-violet-400 p-1.5 text-heading-s text-white shadow-xl ${
+                          t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
+                        }`}
+                      >
+                        <p className="px-4">
+                          🗑️ Invoice <span>#{invoice!.id}</span> deleted
+                          successfully
+                        </p>
+                      </div>
+                    ),
+                    { position: "top-center" }
+                  );
+
                   navigate("/");
                   setShowModal(false);
                 }}

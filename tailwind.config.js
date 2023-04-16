@@ -77,6 +77,38 @@ export default {
           },
         ],
       },
+      keyframes: {
+        slideUp: {
+          "0%": {
+            transform: "translateY(80px) scale(1)",
+            opacity: 1,
+          },
+          "50%": {
+            opacity: 0,
+          },
+          "100%": {
+            transform: "translateY(0px) scale(0.95)",
+            opacity: 0,
+          },
+        },
+        slideDown: {
+          "0%": {
+            transform: "translateY(0px)scale(0.95) ",
+            opacity: 0,
+          },
+          "50%": {
+            opacity: 1,
+          },
+          "100%": {
+            transform: "translateY(80px) scale(1)",
+            opacity: 1,
+          },
+        },
+      },
+      animation: {
+        fadeOutUp: "slideUp 0.3s ease-out forwards",
+        fadeInDown: "slideDown 0.3s ease-out forwards",
+      },
     },
   },
   plugins: [],

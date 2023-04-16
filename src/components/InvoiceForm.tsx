@@ -1,5 +1,5 @@
 import { InvoiceLineForm } from "./InvoiceLineForm";
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import GoBack from "./GoBack";
 import {
   Invoice,
@@ -8,14 +8,10 @@ import {
   InvoiceStatus,
   UserCtx,
 } from "../store/UserContext";
-import {
-  FormProvider,
-  useFieldArray,
-  useForm,
-  useWatch,
-} from "react-hook-form";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { addDays, getId, toCalendarDate } from "../store/utils";
-
+import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 export enum FormType {
   new = "NEW",
   edit = "EDIT",
@@ -100,6 +96,39 @@ const InvoiceForm = ({
   function saveDraft(data: InvoiceFormType) {
     const invoiceId = data.id;
     setInvoices({ type: "add", id: invoiceId, payload: data });
+    const toastId = toast.custom(
+      (t) => (
+        <div
+          className={`flex items-center rounded-[2rem] bg-fem-violet-400 p-1.5 text-heading-s text-white shadow-xl ${
+            t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
+          }`}
+        >
+          <p className="px-4">
+            Invoice <span>#{formData.id}</span> created successfully
+          </p>
+
+          <Link
+            to={`/invoices/${formData.id}`}
+            onClick={() => {
+              toast.dismiss(toastId);
+            }}
+          >
+            <span className="flex aspect-square w-8 items-center justify-center rounded-full bg-white">
+              <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M1 1l4 4-4 4"
+                  stroke="#7C5DFA"
+                  strokeWidth="2"
+                  fill="none"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+          </Link>
+        </div>
+      ),
+      { position: "top-center" }
+    );
     setShowInvoiceForm(false);
   }
 
@@ -108,6 +137,40 @@ const InvoiceForm = ({
     const invoiceId = invoice.id;
     invoice.status = InvoiceStatus.PENDING;
     setInvoices({ type: "add", id: invoiceId, payload: invoice });
+
+    const toastId = toast.custom(
+      (t) => (
+        <div
+          className={`flex items-center rounded-[2rem] bg-fem-violet-400 p-1.5 text-heading-s text-white shadow-xl ${
+            t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
+          }`}
+        >
+          <p className="px-4">
+            Invoice <span>#{formData.id}</span> created successfully
+          </p>
+
+          <Link
+            to={`/invoices/${formData.id}`}
+            onClick={() => {
+              toast.dismiss(toastId);
+            }}
+          >
+            <span className="flex aspect-square w-8 items-center justify-center rounded-full bg-white">
+              <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M1 1l4 4-4 4"
+                  stroke="#7C5DFA"
+                  strokeWidth="2"
+                  fill="none"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+          </Link>
+        </div>
+      ),
+      { position: "top-center" }
+    );
     setShowInvoiceForm(false);
   }
 
@@ -116,6 +179,18 @@ const InvoiceForm = ({
     invoice.status = InvoiceStatus.PENDING;
     setInvoices({ type: "edit", id: invoice!.id, payload: invoice });
     setShowInvoiceForm(false);
+    toast.custom(
+      (t) => (
+        <div
+          className={`flex items-center rounded-[2rem] bg-fem-violet-400 p-1.5 text-heading-s text-white shadow-xl ${
+            t.visible ? "animate-fadeInDown" : "animate-fadeOutUp"
+          }`}
+        >
+          <p className="px-4">✅ Changes saved successfully</p>
+        </div>
+      ),
+      { position: "top-center" }
+    );
   }
 
   const formData = methods.watch();
@@ -123,7 +198,7 @@ const InvoiceForm = ({
   const onError = (errors: any) => console.log(errors);
 
   return (
-    <div className="h-full w-full overflow-scroll bg-white px-6 pb-32 pt-[4.5rem] outline-fem-violet-400 dark:bg-fem-blue-800 md:w-[38.5rem] md:rounded-r-[1.25rem] md:px-14 md:pb-0 md:pt-0 lg:pl-[10rem]">
+    <div className="h-full w-full overflow-scroll bg-white px-6 pb-32 pt-[4.5rem] outline-fem-violet-400 dark:bg-fem-blue-800 md:w-[38.5rem] md:rounded-r-[1.25rem] md:px-14 md:pb-0 md:pt-0 lg:w-[48.5rem] lg:pl-[10rem]">
       <div className="sticky top-0 bg-gradient-to-b from-white from-90% to-transparent py-6 dark:bg-gradient-to-b dark:from-fem-blue-800 dark:from-90% dark:to-transparent">
         <div className="md:hidden">
           <GoBack
@@ -230,7 +305,7 @@ const InvoiceForm = ({
                     }
                   />
                 </div>
-                <div className="md:row-stat-2 col-span-full row-span-1 row-start-3 md:col-span-1 md:col-start-3">
+                <div className="col-span-full row-span-1 row-start-3 md:col-span-1 md:col-start-3 md:row-start-2">
                   <div className="mb-2 flex items-center justify-between">
                     <label className="input-label" htmlFor="country">
                       Country

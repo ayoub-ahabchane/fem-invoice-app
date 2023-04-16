@@ -11,7 +11,7 @@ const Filter = ({
   setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
   const [isOptionsRevealed, setIsOptionsRevealed] = useState<boolean>(false);
-  const { isMobile } = useContext(UserCtx);
+  const { isMobile, invoices } = useContext(UserCtx);
 
   const toggleOptions = () => setIsOptionsRevealed((prevState) => !prevState);
   function updateFilters(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -30,7 +30,11 @@ const Filter = ({
       className="relative flex flex-col items-center"
       id="statusFilterOptions"
     >
-      <button className="flex items-center gap-3" onClick={toggleOptions}>
+      <button
+        className="flex items-center gap-3 disabled:opacity-50"
+        onClick={toggleOptions}
+        disabled={invoices.length === 0}
+      >
         <span className="text-heading-s-variant">
           Filter {!isMobile && "by status"}
         </span>
